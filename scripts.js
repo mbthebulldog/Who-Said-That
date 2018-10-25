@@ -25,7 +25,7 @@ $(function() {
             $( "#blocky" ).show();
 
             //get a random background gradient
-            color = function get_random_color2()
+            var color = function get_random_color2()
             {
                 var r = function () { return Math.floor(Math.random()*256) };
                 return "rgb(" + r() + "," + r() + "," + r() + ")";
