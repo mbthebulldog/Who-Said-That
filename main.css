@@ -26,6 +26,7 @@
 }
 footer {
   margin-top: 10%;
+  color: inherit;
 }
 button {
   border: none;
