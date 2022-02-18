@@ -1,44 +1,90 @@
-<!DOCTYPE html>
-<html>
+$(function() {
+    $("#presley").on("click", function(m) {
+        m.preventDefault();
+        $.ajax(
+            { url: "https://quotesondesign.com/wp-json/wp/v2/posts/?orderby=rand", success: function(data) {
+            
+            console.log(data[0]);
 
-<head>
-	<meta charset="utf-8">
-	<title>&hellip;Who Said That?</title>
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<!-- Font-Awesome -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-	<!-- CSS -->
-	<link rel="stylesheet" href="main.css" type="text/css">
-	<!-- Goolge Fonts -->
-	<link href="https://fonts.googleapis.com/css?family=Amatic+SC|Andika" rel="stylesheet">
-</head>
+            //parse string input
+            if (typeof data === 'string') {
+                data = JSON.parse(data);
+            }
 
-<body>
-	<div id="header">
-		<h1>&hellip;Who Said That?</h1>
-	</div>
+            //assign needed pieces to variables
+            var words = data[0]['excerpt']['rendered'];
+            var person = data[0]['title']['rendered'];
 
-	<div class="container">
-			<div id="blocky">
-				<i class="fa fa-quote-left fa-4x"></i>
-			</div>
-			<div>
-				<p id="words"></p>
-				<div id="credit">
-					<span id="person"></span>
-					<a id="tweety-butt" href="https://twitter.com/intent/tweet"><i class="fa fa-twitter fa-lg"></i></a>
-				</div>
-			</div>
-	</div>
+            //add content and title of data to the #quotey div's children
+            $("#words").html(words);
+            $("#person").html("~ " + person);
 
-	<footer>
-		<button id="presley" class="">Mysterious Button</button>
-	</footer>
+            //edit href of tweet button
+            $('#tweety-butt').attr('href', 'https://twitter.com/intent/tweet?hashtags=quote&text=' + encodeURIComponent('"' + words + '"\n~' + person + "\n")); //edit url of tweet button
 
-<!-- jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<!-- JavaScript -->
-<script src="scripts.js" type="text/javascript"></script>
-</body>
-</html>
+            //show the twitter button & block quote
+            $( "#tweety-butt" ).show();
+            $( "#blocky" ).show();
+
+            //get a random background gradient
+            var color = function get_random_color2()
+            {
+                var r = function () { return Math.floor(Math.random()*256) };
+                return "rgb(" + r() + "," + r() + "," + r() + ")";
+            };
+
+            $("body").css("background-color", color);
+            $(".container").css("color", $("body").css("background-color"));
+            $("footer").css("color", $("body").css("background-color"));
+
+        },
+        cache: false
+    });
+  });
+});
+
+/* $('#get-another-quote-button').on('click', function(e) {
+     e.preventDefault();
+     $.ajax( {
+       url: '/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
+       success: function(data) {
+         var post = data.shift(); // The data is an array of posts. Grab the first one.
+         $('#quote-title').text(post.title);
+         $('#quote-content').html(post.content);
+
+         // If the Source is available, use it. Otherwise hide it.
+         if (typeof post.custom_meta !== 'undefined' && typeof post.custom_meta.Source !== 'undefined') {
+           $('#quote-source').html('Source:' + post.custom_meta.Source);
+         } else {
+           $('#quote-source').text('');
+         }
+       },
+       cache: false
+     });
+   });
+ });
+$.getJSON("https://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&callback=", function(a) {
+  $("body").append(a[0].content + "<p>&mdash; " + a[0].title + "</p>")
+});
+
+$('#get-another-quote-button').on('click', function(e) {
+    e.preventDefault();
+    $.ajax( {
+      url: '/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
+      success: function(data) {
+        var post = data.shift(); // The data is an array of posts. Grab the first one.
+        $('#quote-title').text(post.title);
+        $('#quote-content').html(post.content);
+
+        // If the Source is available, use it. Otherwise hide it.
+        if (typeof post.custom_meta !== 'undefined' && typeof post.custom_meta.Source !== 'undefined') {
+          $('#quote-source').html('Source:' + post.custom_meta.Source);
+        } else {
+          $('#quote-source').text('');
+        }
+      },
+      cache: false
+    });
+  });
+});
+*/
